@@ -263,42 +263,15 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 
 <!-- ════ LOGIN ════ -->
 <div class="login-wrap" id="loginScreen">
-  <div class="login-card">
-    <div class="login-title">🔐 로그인</div>
-    <div class="login-sub">역할을 선택하고 비밀번호를 입력하세요</div>
-    <div class="role-grid">
-      <div class="role-btn" onclick="selectRole('eval1')" id="role-eval1">
-        <span class="role-icon">📝</span>
-        <div class="role-name">1차 자기평가</div>
-      </div>
-      <div class="role-btn" onclick="selectRole('eval2')" id="role-eval2">
-        <span class="role-icon">👔</span>
-        <div class="role-name">2차 소장</div>
-      </div>
-      <div class="role-btn" onclick="selectRole('eval3')" id="role-eval3">
-        <span class="role-icon">🏢</span>
-        <div class="role-name">3차 본부장</div>
-      </div>
-      <div class="role-btn" onclick="selectRole('eval4')" id="role-eval4">
-        <span class="role-icon">👑</span>
-        <div class="role-name">4차 사장</div>
-      </div>
-      <div class="role-btn" onclick="selectRole('eval5')" id="role-eval5">
-        <span class="role-icon">🎖️</span>
-        <div class="role-name">5차 대표</div>
-      </div>
-      <div class="role-btn" onclick="selectRole('admin')" id="role-admin">
-        <span class="role-icon">⚙️</span>
-        <div class="role-name">인사담당자</div>
-      </div>
-    </div>
-    <div class="pw-group">
-      <label>비밀번호</label>
-      <input type="password" id="pwInput" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <button class="btn-login" onclick="doLogin()">로그인</button>
-    <div class="error-msg" id="loginError">역할 또는 비밀번호가 올바르지 않습니다.</div>
+ <div class="login-card">
+  <div class="login-title">📋 정규직 전환 평가</div>
+  <div class="login-sub">코드번호를 입력하세요</div>
+  <div class="pw-group">
+    <label>코드번호</label>
+    <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
+  <button class="btn-login" onclick="doLogin()">확인</button>
+  <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
 </div>
 
 <!-- ════ APP ════ -->
@@ -536,9 +509,10 @@ function selectRole(role) {
 }
 
 function doLogin() {
-  if (!currentRole) { showError('역할을 선택해주세요.'); return; }
   const pw = document.getElementById('pwInput').value;
-  if (pw !== PASSWORDS[currentRole]) { showError('비밀번호가 올바르지 않습니다.'); return; }
+  const found = Object.entries(PASSWORDS).find(([role, pass]) => pass === pw);
+  if (!found) { showError('코드번호가 올바르지 않습니다.'); return; }
+  currentRole = found[0];
 
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appWrap').style.display = 'block';
