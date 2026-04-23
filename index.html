@@ -399,7 +399,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card-header"><div class="card-header-num">✍</div><h2>의견 및 서명</h2></div>
           <div class="card-body">
             <div class="form-group" style="margin-bottom:16px">
-              <label class="field-label">종합의견 (정규직 / 보류 / 퇴사)</label>
+              <label class="field-label" id="opinionLabel">종합의견 (정규직 / 보류 / 퇴사)</label>
               <textarea id="f_opinion" placeholder="종합평가 의견을 입력하세요..."></textarea>
             </div>
             <div class="sig-wrap">
@@ -867,6 +867,19 @@ function showEvalForm(target) {
 
   const roundNum = { eval1: '1차', eval2: '2차', eval3: '3차' }[currentRole];
   document.getElementById('evalTableTitle').textContent = `평가내용 — ${roundNum} 평가`;
+
+  const opinionLabels = {
+  eval1: '업무 수행 내용 및 자기평가 의견',
+  eval2: '업무 수행 평가 및 피드백 의견',
+  eval3: '종합 평가 및 최종 의견',
+};
+const opinionPlaceholders = {
+  eval1: '- 최근 수행한 주요 업무와 성과를 간략히 작성해 주세요.\n- 업무 수행 과정에서의 강점 및 개선이 필요한 부분을 함께 작성해 주세요.',
+  eval2: '- 대상자의 업무 수행 수준과 성과에 대해 평가해 주세요.\n- 강점과 개선이 필요한 부분을 구체적으로 작성해 주세요.\n- 향후 성장 가능성 및 보완이 필요한 사항에 대해 작성해 주세요.',
+  eval3: '- 1차 및 2차 평가 내용을 종합하여 최종 의견을 작성해 주세요.\n- 조직 적합성 및 정규직 전환 여부에 대한 판단을 포함해 주세요.\n- 종합적인 관점에서 대상자의 강점과 고려사항을 작성해 주세요.',
+};
+document.getElementById('opinionLabel').textContent = opinionLabels[currentRole] || '종합의견';
+document.getElementById('f_opinion').placeholder = opinionPlaceholders[currentRole] || '';
 
   buildEvalTable();
   initSig();
