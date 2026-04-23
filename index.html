@@ -772,6 +772,11 @@ async function searchEvalTargets() {
   const name = document.getElementById('evalNameInput').value.trim();
   if (!name) { alert('이름을 입력하세요.'); return; }
 
+  if (currentRole === 'eval1') {
+    selectTarget(0, { name });
+    return;
+  }
+
   showLoading('조회 중...');
   try {
     const res = await apiGet({ action: 'getByEvaluator', name, role: currentRole });
