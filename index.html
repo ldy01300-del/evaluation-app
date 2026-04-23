@@ -265,7 +265,11 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 <div class="login-wrap" id="loginScreen">
  <div class="login-card">
   <div class="login-title">📋 정규직 전환 평가</div>
-  <div class="login-sub">코드번호를 입력하세요</div>
+  <div class="login-sub">이름과 코드번호를 입력하세요</div>
+  <div class="pw-group">
+    <label>이름</label>
+    <input type="text" id="loginName" placeholder="이름 입력" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
   <div class="pw-group">
     <label>코드번호</label>
     <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
@@ -510,7 +514,9 @@ function selectRole(role) {
 }
 
 function doLogin() {
+  const loginName = document.getElementById('loginName').value.trim();
   const pw = document.getElementById('pwInput').value;
+  if (!loginName) { showError('이름을 입력해주세요.'); return; }
   const found = Object.entries(PASSWORDS).find(([role, pass]) => pass === pw);
   if (!found) { showError('코드번호가 올바르지 않습니다.'); return; }
   currentRole = found[0];
@@ -521,8 +527,13 @@ function doLogin() {
 
   if (currentRole === 'admin') {
     loadAdminDashboard();
-  } else {
+  } else if (currentRole === 'eval1') {
     showEvaluatorScreen();
+    selectTarget(0, { name: loginName });
+  } else {
+    document.getElementById('evalNameInput').value = loginName;
+    showEvaluatorScreen();
+    searchEvalTargets();
   }
 }
 
