@@ -265,10 +265,10 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 <div class="login-wrap" id="loginScreen">
  <div class="login-card">
   <div class="login-title">📋 정규직 전환 평가</div>
-  <div class="login-sub">이름과 코드번호를 입력하세요</div>
-  <div class="pw-group">
-    <label>이름</label>
-    <input type="text" id="loginName" placeholder="이름 입력" onkeydown="if(event.key==='Enter')doLogin()">
+  <div class="login-sub">코드번호를 입력하세요</div>
+  <div class="pw-group" id="empNoGroup" style="display:none">
+    <label>사번</label>
+    <input type="text" id="empNoInput" placeholder="사번 입력">
   </div>
   <div class="pw-group">
     <label>코드번호</label>
@@ -514,12 +514,25 @@ function selectRole(role) {
 }
 
 function doLogin() {
-  const loginName = document.getElementById('loginName').value.trim();
   const pw = document.getElementById('pwInput').value;
-  if (!loginName) { showError('이름을 입력해주세요.'); return; }
   const found = Object.entries(PASSWORDS).find(([role, pass]) => pass === pw);
   if (!found) { showError('코드번호가 올바르지 않습니다.'); return; }
   currentRole = found[0];
+
+  // 1차,2차는 사번 필요
+  if (currentRole === 'eval1' || currentRole === 'eval2') {
+    const empNoGroup = document.getElementById('empNoGroup');
+    if (empNoGroup.style.display === 'none') {
+      empNoGroup.style.display = 'block';
+      document.getElementById('pwInput').placeholder = '코드번호 다시 입력';
+      showError('사번을 입력하고 코드번호를 다시 눌러주세요.');
+      return;
+    }
+    const empNo = document.getElementById('empNoInput').value.trim();
+    if (!empNo) { showError('사번을 입력해주세요.'); return; }
+    loginWithEmpNo(empNo);
+    return;
+  }
 
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appWrap').style.display = 'block';
@@ -527,14 +540,39 @@ function doLogin() {
 
   if (currentRole === 'admin') {
     loadAdminDashboard();
-  } else if (currentRole === 'eval1') {
-    showEvaluatorScreen();
-    selectTarget(0, { name: loginName });
   } else {
-    document.getElementById('evalNameInput').value = loginName;
     showEvaluatorScreen();
     searchEvalTargets();
   }
+}
+
+async function loginWithEmpNo(empNo) {
+  showLoading('사번 확인 중...');
+  try {
+    const res = await apiGet({ action: 'getHrInfo', empNo });
+    if (!res.success) { hideLoading(); showError(res.error); return; }
+    const hr = res.data;
+
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appWrap').style.display = 'block';
+    document.getElementById('roleBadge').textContent = ROLE_LABELS[currentRole];
+
+    if (currentRole === 'eval1') {
+      showEvaluatorScreen();
+      selectTarget(0, {
+        name: hr.name,
+        dept: hr.dept,
+        position: hr.position,
+        hireDate: hr.hireDate,
+        site: ''
+      });
+    } else if (currentRole === 'eval2') {
+      document.getElementById('evalNameInput').value = hr.name;
+      showEvaluatorScreen();
+      searchEvalTargets(empNo);
+    }
+  } catch(e) { showError('오류가 발생했습니다.'); }
+  hideLoading();
 }
 
 function showError(msg) {
@@ -754,18 +792,10 @@ function showEvaluatorScreen() {
   document.getElementById('evalScreenSub').textContent = s;
 }
 
-async function searchEvalTargets() {
-  const name = document.getElementById('evalNameInput').value.trim();
-  if (!name) { alert('이름을 입력하세요.'); return; }
-
-  if (currentRole === 'eval1') {
-    selectTarget(0, { name });
-    return;
-  }
-
+async function searchEvalTargets(empNo) {
   showLoading('조회 중...');
   try {
-    const res = await apiGet({ action: 'getByEvaluator', name, role: currentRole });
+    const res = await apiGet({ action: 'getByEvaluator', role: currentRole, empNo: empNo || '' });
     renderTargetList(res.data || []);
   } catch(e) { alert('조회 중 오류가 발생했습니다.'); }
   hideLoading();
