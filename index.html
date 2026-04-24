@@ -519,8 +519,9 @@ function doLogin() {
     const empNoGroup = document.getElementById('empNoGroup');
     if (empNoGroup.style.display === 'none') {
       empNoGroup.style.display = 'block';
-      document.getElementById('pwInput').placeholder = '코드번호 다시 입력';
-      showError('사번을 입력하고 코드번호를 다시 눌러주세요.');
+      document.getElementById('pwInput').readOnly = true;
+      document.getElementById('pwInput').style.opacity = '0.6';
+      document.getElementById('empNoInput').focus();
       return;
     }
     const empNo = document.getElementById('empNoInput').value.trim();
