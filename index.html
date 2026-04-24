@@ -567,10 +567,10 @@ async function loginWithEmpNo(empNo) {
       document.getElementById('f_hireDate').value = hr.hireDate ? hr.hireDate.slice(0,10) : '';
     } else if (currentRole === 'eval2') {
       showEvaluatorScreen();
-      document.getElementById('nameSearchArea').style.display = 'none';
       showLoading('목록 불러오는 중...');
       try {
         const res = await apiGet({ action: 'getByEvaluator', role: currentRole, empNo: empNo });
+        document.getElementById('evalNameInput').value = '';
         renderTargetList(res.data || []);
       } catch(e) { alert('오류가 발생했습니다.'); }
       hideLoading();
