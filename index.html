@@ -143,7 +143,7 @@ table.eval-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.eval-tbl th { background: var(--navy); color: var(--white); padding: 10px 8px; font-size: 11px; font-weight: 600; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
 table.eval-tbl td { padding: 10px 8px; border: 1px solid var(--border); vertical-align: middle; background: var(--white); }
 table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
-.factor-cell { background: var(--sky2) !important; font-weight: 700; text-align: center; font-size: 12px; color: var(--navy); }
+.factor-cell { background: var(--sky2) !important; font-weight: 700; text-align: center; font-size: 12px; color: var(--navy); white-space: nowrap; }
 .item-name { font-weight: 700; font-size: 12px; color: var(--navy); }
 .item-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
 
@@ -339,6 +339,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
       <!-- 평가 폼 -->
       <div id="evalFormArea" style="display:none">
         <div class="btn-row" style="justify-content:flex-start;margin-bottom:16px">
+          <div id="backSearchBtn" class="btn-row" style="justify-content:flex-start;margin-bottom:16px">
           <button class="btn btn-secondary" onclick="backToSearch()">← 다시 검색</button>
         </div>
 
@@ -390,7 +391,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-header-num">4</div><h2 id="evalTableTitle">평가내용</h2></div>
+          <div class="card-header"><div class="card-header-num">2</div><h2 id="evalTableTitle">평가내용</h2></div>
           <div class="card-body" style="padding:0"><div id="evalTableContainer"></div></div>
         </div>
 
@@ -519,9 +520,8 @@ function doLogin() {
     const empNoGroup = document.getElementById('empNoGroup');
     if (empNoGroup.style.display === 'none') {
       empNoGroup.style.display = 'block';
-      document.getElementById('pwInput').readOnly = true;
-      document.getElementById('pwInput').style.opacity = '0.6';
-      document.getElementById('empNoInput').focus();
+      document.getElementById('pwInput').placeholder = '코드번호 다시 입력';
+      showError('사번을 입력하고 코드번호를 다시 눌러주세요.');
       return;
     }
     const empNo = document.getElementById('empNoInput').value.trim();
@@ -842,6 +842,7 @@ function backToSearch() {
 // ═══════════════════════════════════════
 function showEvalForm(target) {
   document.getElementById('evalFormArea').style.display = 'block';
+  document.getElementById('backSearchBtn').style.display = currentRole === 'eval1' ? 'none' : 'flex';
   document.getElementById('signOnlyArea').style.display = 'none';
   currentScores = {};
 
