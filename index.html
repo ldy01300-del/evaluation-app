@@ -575,6 +575,9 @@ async function loginWithEmpNo(empNo) {
       } catch(e) { alert('오류가 발생했습니다.'); }
       hideLoading();
     }
+  } catch(e) { showError('오류가 발생했습니다.'); }
+  hideLoading();
+}
 
 function showError(msg) {
   const el = document.getElementById('loginError');
