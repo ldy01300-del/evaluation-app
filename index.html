@@ -266,13 +266,13 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
  <div class="login-card">
   <div class="login-title">📋 정규직 전환 평가</div>
   <div class="login-sub">코드번호를 입력하세요</div>
-  <div class="pw-group" id="empNoGroup" style="display:none">
-    <label>사번</label>
-    <input type="text" id="empNoInput" placeholder="사번 입력">
-  </div>
   <div class="pw-group">
     <label>코드번호</label>
     <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
+  <div class="pw-group" id="empNoGroup" style="display:none">
+    <label>사번</label>
+    <input type="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <button class="btn-login" onclick="doLogin()">확인</button>
   <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
