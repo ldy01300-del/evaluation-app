@@ -546,7 +546,7 @@ async function loginWithEmpNo(empNo) {
   showLoading('사번 확인 중...');
   try {
     const res = await apiGet({ action: 'getHrInfo', empNo });
-    if (!res.success) { hideLoading(); showError(res.error); return; }
+    if (!res.성공) { hideLoading(); showError(res.error); return; }
     const hr = res.data;
 
     document.getElementById('loginScreen').style.display = 'none';
@@ -594,6 +594,8 @@ function hideLoading() { document.getElementById('loadingOverlay').style.display
 async function apiGet(params) {
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params);
   const res = await fetch(url);
+  console.log(url)
+  console.log(res)
   return await res.json();
 }
 
@@ -796,6 +798,7 @@ async function searchEvalTargets(empNo) {
   try {
     const res = await apiGet({ action: 'getByEvaluator', role: currentRole, empNo: empNo || '' });
     renderTargetList(res.data || []);
+    console.log(res.data)
   } catch(e) { alert('조회 중 오류가 발생했습니다.'); }
   hideLoading();
 }
