@@ -536,11 +536,9 @@ function doLogin() {
 
   if (currentRole === 'admin') {
     loadAdminDashboard();
-  } else if (currentRole === 'eval3' || currentRole === 'eval4' || currentRole === 'eval5') {
-    showEvaluatorScreen();
-    searchEvalTargets('');
   } else {
     showEvaluatorScreen();
+    searchEvalTargets();
   }
 }
 
@@ -548,7 +546,7 @@ async function loginWithEmpNo(empNo) {
   showLoading('사번 확인 중...');
   try {
     const res = await apiGet({ action: 'getHrInfo', empNo });
-    if (!res.성공) { hideLoading(); showError(res.error); return; }
+    if (!res.success) { hideLoading(); showError(res.error); return; }
     const hr = res.data;
 
     document.getElementById('loginScreen').style.display = 'none';
