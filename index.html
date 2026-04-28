@@ -685,7 +685,8 @@ function openAdminDetail(idx) {
           <div class="form-group"><label class="field-label">직급</label><input type="text" value="${d.position}" readonly></div>
           <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate.slice(0,10)}" readonly></div>
           <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate.slice(0,10)}" readonly></div>
-       </div>
+      
+ </div>
       </div>
     </div>
 
@@ -778,10 +779,12 @@ function buildAdminScoreTable(scores1, scores2, scores3) {
     <div class="card-body" style="padding:0">
       <table class="eval-tbl">
         <thead><tr>
-          <th>고과요소</th><th>평가항목</th><th>평가내용</th>
-          <th style="color:var(--cyan-light)">1차</th>
-          <th>2차</th>
-          <th>3차</th>
+          <th style="width: 60px">고과요소</th>
+          <th style="width: 80px">평가항목</th>
+          <th>평가내용</th>
+          <th style="color:var(--cyan-light);width: 62px">1차</th>
+          <th style="width: 62px">2차</th>
+          <th style="width: 62px">3차</th>
         </tr></thead>
         <tbody>${rows}
         <tr class="total-row">
