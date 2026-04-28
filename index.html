@@ -116,7 +116,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--sky); color: v
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group.span2 { grid-column: span 2; }
 label.field-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-input[type=text], input[type=date], input[type=password], select, textarea {
+input[입력=text], input[입력=date], input[입력=password], select, textarea {
   border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px;
   font-size: 14px; font-family: inherit; color: var(--text); background: var(--sky);
   outline: none; width: 100%; transition: all 0.2s;
@@ -215,7 +215,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 .eval-item-info { flex: 1; }
 .eval-item-name { font-weight: 700; font-size: 14px; color: var(--navy); }
 .eval-item-dept { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: 지금rap; }
 .status-1 { background: #FEF3C7; color: #92400E; }
 .status-2 { background: #DBEAFE; color: #1E40AF; }
 .status-3 { background: #D1FAE5; color: #065F46; }
@@ -232,7 +232,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 .loading-overlay { position: fixed; inset: 0; background: rgba(10,46,82,0.5); display: none; align-items: center; justify-content: center; z-index: 999; }
 .loading-box { background: var(--white); border-radius: 14px; padding: 32px 40px; text-align: center; }
 .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin { 까지 { transform: rotate(360deg); } }
 
 @media (max-width: 600px) {
   .form-grid.cols4 { grid-template-columns: repeat(2,1fr); }
@@ -268,11 +268,11 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
   <div class="login-sub">코드번호를 입력하세요</div>
   <div class="pw-group">
     <label>코드번호</label>
-    <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input 입력="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <div class="pw-group" id="empNoGroup" style="display:none">
     <label>사번</label>
-    <input type="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input 입력="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <button class="btn-login" onclick="doLogin()">확인</button>
   <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
@@ -326,7 +326,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card-body">
             <div class="form-group">
               <label class="field-label">이름</label>
-              <input type="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
+              <input 입력="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
             </div>
             <div class="btn-row">
               <button class="btn btn-cyan" onclick="searchEvalTargets()">🔍 조회</button>
@@ -347,29 +347,29 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card">
             <div class="card-header"><div class="card-header-num">1</div><h2>기본사항</h2></div>
             <div class="card-body">
-              <div class="form-grid cols4">
+              <div class="form-grid cols3">
                 <div class="form-group">
                   <label class="field-label">성명</label>
-                  <input type="text" id="f_name" placeholder="자동입력" readonly>
+                  <input 입력="text" id="f_name" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">부서</label>
-                  <input type="text" id="f_dept" placeholder="자동입력" readonly>
+                  <input 입력="text" id="f_dept" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">직급</label>
-                  <input type="text" id="f_position" placeholder="자동입력" readonly>
+                  <input 입력="text" id="f_position" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">입사일</label>
-                  <input type="text" id="f_hireDate" placeholder="자동입력" readonly>
+                  <input 입력="text" id="f_hireDate" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">평가일</label>
-                  <input type="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
+                  <input 입력="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
                 </div>
               </div>
-              <input type="hidden" id="f_site" value="">
+              <input 입력="hidden" id="f_site" value="">
             </div>
           </div>
         </div>
@@ -679,13 +679,12 @@ function openAdminDetail(idx) {
     <div class="card">
       <div class="card-header"><div class="card-header-num">1</div><h2>기본사항</h2></div>
       <div class="card-body">
-        <div class="form-grid cols4">
+        <div class="form-grid cols3">
           <div class="form-group"><label class="field-label">성명</label><input type="text" value="${d.name}" readonly></div>
-          <div class="form-group"><label class="field-label">직급</label><input type="text" value="${d.position}" readonly></div>
-          <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate}" readonly></div>
-          <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate}" readonly></div>
           <div class="form-group"><label class="field-label">부서</label><input type="text" value="${d.dept}" readonly></div>
-          <div class="form-group"><label class="field-label">현장</label><input type="text" value="${d.site||''}" readonly></div>
+          <div class="form-group"><label class="field-label">직급</label><input type="text" value="${d.position}" readonly></div>
+          <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate.slice(0,10)}" readonly></div>
+          <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate.slice(0,10)}" readonly></div>
         </div>
       </div>
     </div>
