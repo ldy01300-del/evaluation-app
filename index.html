@@ -116,7 +116,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--sky); color: v
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group.span2 { grid-column: span 2; }
 label.field-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-input[입력=text], input[입력=date], input[입력=password], select, textarea {
+input[type=text], input[type=date], input[type=password], select, textarea {
   border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px;
   font-size: 14px; font-family: inherit; color: var(--text); background: var(--sky);
   outline: none; width: 100%; transition: all 0.2s;
@@ -268,11 +268,11 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
   <div class="login-sub">코드번호를 입력하세요</div>
   <div class="pw-group">
     <label>코드번호</label>
-    <input 입력="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <div class="pw-group" id="empNoGroup" style="display:none">
     <label>사번</label>
-    <input 입력="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <button class="btn-login" onclick="doLogin()">확인</button>
   <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
@@ -326,7 +326,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card-body">
             <div class="form-group">
               <label class="field-label">이름</label>
-              <input 입력="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
+              <input type="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
             </div>
             <div class="btn-row">
               <button class="btn btn-cyan" onclick="searchEvalTargets()">🔍 조회</button>
@@ -350,26 +350,26 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
               <div class="form-grid cols4">
                 <div class="form-group">
                   <label class="field-label">성명</label>
-                  <input 입력="text" id="f_name" placeholder="자동입력" readonly>
+                  <input type="text" id="f_name" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">부서</label>
-                  <input 입력="text" id="f_dept" placeholder="자동입력" readonly>
+                  <input type="text" id="f_dept" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">직급</label>
-                  <input 입력="text" id="f_position" placeholder="자동입력" readonly>
+                  <input type="text" id="f_position" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">입사일</label>
-                  <input 입력="text" id="f_hireDate" placeholder="자동입력" readonly>
+                  <input type="text" id="f_hireDate" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">평가일</label>
-                  <input 입력="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
+                  <input type="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
                 </div>
               </div>
-              <input 입력="hidden" id="f_site" value="">
+              <input type="hidden" id="f_site" value="">
             </div>
           </div>
         </div>
@@ -685,6 +685,7 @@ function openAdminDetail(idx) {
           <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate}" readonly></div>
           <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate}" readonly></div>
           <div class="form-group"><label class="field-label">부서</label><input type="text" value="${d.dept}" readonly></div>
+          <div class="form-group"><label class="field-label">현장</label><input type="text" value="${d.site||''}" readonly></div>
         </div>
       </div>
     </div>
@@ -1206,7 +1207,7 @@ function generatePDF(idx) {
   ctx.font = 'bold 14px "Noto Sans KR"'; ctx.textAlign = 'left';
   ctx.fillText('1. 기본사항', 40, 100);
   const tCols = [80,200,80,130,160];
-  const tHeaders = ['구 분','부 서','직 급','입사일','성 명'];
+  const tHeaders = ['구 분','부 서(현장)','직 급','입사일','성 명'];
   let tx = 40, ty = 108;
   tHeaders.forEach((h,i) => {
     ctx.fillStyle = '#DBEAFE'; ctx.fillRect(tx, ty, tCols[i], 28);
