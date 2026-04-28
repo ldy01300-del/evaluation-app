@@ -268,11 +268,11 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
   <div class="login-sub">코드번호를 입력하세요</div>
   <div class="pw-group">
     <label>코드번호</label>
-    <input 입력="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <div class="pw-group" id="empNoGroup" style="display:none">
     <label>사번</label>
-    <input 입력="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <button class="btn-login" onclick="doLogin()">확인</button>
   <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
@@ -326,7 +326,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card-body">
             <div class="form-group">
               <label class="field-label">이름</label>
-              <input 입력="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
+              <input type="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
             </div>
             <div class="btn-row">
               <button class="btn btn-cyan" onclick="searchEvalTargets()">🔍 조회</button>
@@ -350,26 +350,26 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
               <div class="form-grid cols4">
                 <div class="form-group">
                   <label class="field-label">성명</label>
-                  <input 입력="text" id="f_name" placeholder="자동입력" readonly>
+                  <input type="text" id="f_name" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">부서</label>
-                  <input 입력="text" id="f_dept" placeholder="자동입력" readonly>
+                  <input type="text" id="f_dept" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">직급</label>
-                  <input 입력="text" id="f_position" placeholder="자동입력" readonly>
+                  <input type="text" id="f_position" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">입사일</label>
-                  <input 입력="text" id="f_hireDate" placeholder="자동입력" readonly>
+                  <input type="text" id="f_hireDate" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">평가일</label>
-                  <input 입력="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
+                  <input type="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
                 </div>
               </div>
-              <input 입력="hidden" id="f_site" value="">
+              <input type="hidden" id="f_site" value="">
             </div>
           </div>
         </div>
@@ -681,10 +681,11 @@ function openAdminDetail(idx) {
       <div class="card-body">
         <div class="form-grid cols4">
           <div class="form-group"><label class="field-label">성명</label><input type="text" value="${d.name}" readonly></div>
-          <div class="form-group"><label class="field-label">부서</label><input type="text" value="${d.dept}" readonly></div>
           <div class="form-group"><label class="field-label">직급</label><input type="text" value="${d.position}" readonly></div>
-          <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate.slice(0,10)}" readonly></div>
-          <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate.slice(0,10)}" readonly></div>
+          <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate}" readonly></div>
+          <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate}" readonly></div>
+          <div class="form-group"><label class="field-label">부서</label><input type="text" value="${d.dept}" readonly></div>
+          <div class="form-group"><label class="field-label">현장</label><input type="text" value="${d.site||''}" readonly></div>
         </div>
       </div>
     </div>
@@ -925,7 +926,7 @@ document.getElementById('f_opinion').placeholder = opinionPlaceholders[currentRo
   initSig();
 }
 
-// 2차/3차용 - 이전 점수 컬럼 포함
+// 2차/3차용 - 이전 점수 컬럼포함
 function buildEvalTable() {
   const is2nd = currentRole === 'eval2';
   const is3rd = currentRole === 'eval3';
@@ -937,7 +938,7 @@ function buildEvalTable() {
     <th style="width:52px">고과요소</th>
     <th style="width:80px">평가항목</th>
     <th>평가내용</th>
-    ${scores1 ? '<th style="width:46px">자기평가</th>' : ''}
+    ${scores1 ? '<th style="width:46px">1차</th>' : ''}
     ${scores2 ? '<th style="width:46px">2차</th>' : ''}
     <th colspan="5">탁월 → 부족</th>
     <th style="width:46px">점수</th>
