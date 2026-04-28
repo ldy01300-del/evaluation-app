@@ -272,11 +272,11 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
   <div class="login-sub">코드번호를 입력하세요</div>
   <div class="pw-group">
     <label>코드번호</label>
-    <input 입력="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pwInput" placeholder="코드번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <div class="pw-group" id="empNoGroup" style="display:none">
     <label>사번</label>
-    <input 입력="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="text" id="empNoInput" placeholder="사번 입력" onkeydown="if(event.key==='Enter')doLogin()">
   </div>
   <button class="btn-login" onclick="doLogin()">확인</button>
   <div class="error-msg" id="loginError">코드번호가 올바르지 않습니다.</div>
@@ -330,7 +330,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card-body">
             <div class="form-group">
               <label class="field-label">이름</label>
-              <input 입력="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
+              <input type="text" id="evalNameInput" placeholder="본인 이름 입력" onkeydown="if(event.key==='Enter')searchEvalTargets()">
             </div>
             <div class="btn-row">
               <button class="btn btn-cyan" onclick="searchEvalTargets()">🔍 조회</button>
@@ -354,26 +354,26 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
               <div class="form-grid cols3">
                 <div class="form-group">
                   <label class="field-label">성명</label>
-                  <input 입력="text" id="f_name" placeholder="자동입력" readonly>
+                  <input type="text" id="f_name" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">부서</label>
-                  <input 입력="text" id="f_dept" placeholder="자동입력" readonly>
+                  <input type="text" id="f_dept" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">직급</label>
-                  <input 입력="text" id="f_position" placeholder="자동입력" readonly>
+                  <input type="text" id="f_position" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">입사일</label>
-                  <input 입력="text" id="f_hireDate" placeholder="자동입력" readonly>
+                  <input type="text" id="f_hireDate" placeholder="자동입력" readonly>
                 </div>
                 <div class="form-group">
                   <label class="field-label">평가일</label>
-                  <input 입력="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
+                  <input type="text" id="f_evalDate" placeholder="YYYY-MM-DD" maxlength="10" oninput="autoHyphen(this)">
                 </div>
               </div>
-              <input 입력="hidden" id="f_site" value="">
+              <input type="hidden" id="f_site" value="">
             </div>
           </div>
         </div>
@@ -597,13 +597,14 @@ function hideLoading() { document.getElementById('loadingOverlay').style.display
 // ═══════════════════════════════════════
 async function apiGet(params) {
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params);
-  const res = await fetch(url);
+  const res = await fetch(url, { redirect: 'follow' }); 
   return await res.json();
 }
 
 async function apiPost(data) {
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
+    redirect: 'follow', 
     body: JSON.stringify(data)
   });
   return await res.json();
