@@ -5,12 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>계약직 정규직 전환 평가서</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600;700&display=swap');
 
 :root {
   --navy: #0A2E52;
@@ -120,7 +116,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--sky); color: v
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group.span2 { grid-column: span 2; }
 label.field-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-input[입력=text], input[입력=date], input[입력=password], select, textarea {
+input[type=text], input[type=date], input[type=password], select, textarea {
   border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px;
   font-size: 14px; font-family: inherit; color: var(--text); background: var(--sky);
   outline: none; width: 100%; transition: all 0.2s;
@@ -219,7 +215,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 .eval-item-info { flex: 1; }
 .eval-item-name { font-weight: 700; font-size: 14px; color: var(--navy); }
 .eval-item-dept { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: 지금rap; }
+.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .status-1 { background: #FEF3C7; color: #92400E; }
 .status-2 { background: #DBEAFE; color: #1E40AF; }
 .status-3 { background: #D1FAE5; color: #065F46; }
@@ -236,7 +232,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
 .loading-overlay { position: fixed; inset: 0; background: rgba(10,46,82,0.5); display: none; align-items: center; justify-content: center; z-index: 999; }
 .loading-box { background: var(--white); border-radius: 14px; padding: 32px 40px; text-align: center; }
 .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-@keyframes spin { 까지 { transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 600px) {
   .form-grid.cols4 { grid-template-columns: repeat(2,1fr); }
@@ -351,7 +347,7 @@ table.eval-tbl tr:nth-child(even) td { background: #f8fbff; }
           <div class="card">
             <div class="card-header"><div class="card-header-num">1</div><h2>기본사항</h2></div>
             <div class="card-body">
-              <div class="form-grid cols3">
+              <div class="form-grid cols4">
                 <div class="form-group">
                   <label class="field-label">성명</label>
                   <input type="text" id="f_name" placeholder="자동입력" readonly>
@@ -597,14 +593,13 @@ function hideLoading() { document.getElementById('loadingOverlay').style.display
 // ═══════════════════════════════════════
 async function apiGet(params) {
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params);
-  const res = await fetch(url, { redirect: 'follow' }); 
+  const res = await fetch(url);
   return await res.json();
 }
 
 async function apiPost(data) {
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    redirect: 'follow', 
     body: JSON.stringify(data)
   });
   return await res.json();
@@ -684,13 +679,13 @@ function openAdminDetail(idx) {
     <div class="card">
       <div class="card-header"><div class="card-header-num">1</div><h2>기본사항</h2></div>
       <div class="card-body">
-        <div class="form-grid cols3">
+        <div class="form-grid cols4">
           <div class="form-group"><label class="field-label">성명</label><input type="text" value="${d.name}" readonly></div>
           <div class="form-group"><label class="field-label">부서</label><input type="text" value="${d.dept}" readonly></div>
           <div class="form-group"><label class="field-label">직급</label><input type="text" value="${d.position}" readonly></div>
           <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${d.hireDate.slice(0,10)}" readonly></div>
           <div class="form-group"><label class="field-label">평가일</label><input type="text" value="${d.evalDate.slice(0,10)}" readonly></div>
-        </div>
+       </div>
       </div>
     </div>
 
@@ -782,16 +777,12 @@ function buildAdminScoreTable(scores1, scores2, scores3) {
     <div class="card-header"><div class="card-header-num">📊</div><h2>평가 점수 종합</h2></div>
     <div class="card-body" style="padding:0">
       <table class="eval-tbl">
-        <thead>
-        <tr>
-        <th style="width: 60px">고과요소</th>
-        <th style="width: 80px">평가항목</th>
-        <th>평가내용</th>
-        <th style="color:var(--cyan-light);width: 62px">1차</th>
-        <th style="width: 62px">2차</th>
-        <th style="width: 62px">3차</th>
-      </tr>
-    </thead>
+        <thead><tr>
+          <th>고과요소</th><th>평가항목</th><th>평가내용</th>
+          <th style="color:var(--cyan-light)">1차</th>
+          <th>2차</th>
+          <th>3차</th>
+        </tr></thead>
         <tbody>${rows}
         <tr class="total-row">
           <td colspan="3" style="text-align:right;padding-right:16px">총 점</td>
