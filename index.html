@@ -1149,24 +1149,24 @@ function showSignOnlyForm(target) {
       <div class="card-body" style="padding:0">
         <table class="eval-tbl">
           <thead>
-            <tr>
-              <th style="width:60px">고과요소</th>
-              <th style="width:90px">평가항목</th>
-              <th>평가내용</th>
-              <th style="width:60px;color:var(--cyan-light)">1차</th>
-              <th style="width:60px">2차</th>
-              <th style="width:60px">3차</th>
-            </tr>
+           <tr>
+            <th style="width:60px">고과요소</th>
+            <th style="width:90px">평가항목</th>
+            <th>평가내용</th>
+            <th style="width:70px;color:var(--cyan-light)">1차</th>
+            <th style="width:70px">2차</th>
+            <th style="width:70px">3차</th>
+           </tr>
           </thead>
           <tbody>
-            ${buildScoreSummaryRows(scores1, scores2, scores3)}
-            <tr class="total-row">
-              <td colspan="3" style="text-align:right;padding-right:16px;font-weight:700">총 점</td>
-              <td style="text-align:center;color:var(--cyan)"><span class="total-score-big">${t1}점</span></td>
-              <td style="text-align:center"><span class="total-score-big">${t2}점</span></td>
-              <td style="text-align:center"><span class="total-score-big">${t3}점</span></td>
-            </tr>
-          </tbody>
+         ${buildScoreSummaryRows(scores1, scores2, scores3)}
+<tr class="total-row">
+           <td colspan="3" style="text-align:center;font-size: 20px;padding-right:16px;font-weight:700">총 점</td>
+           <td style="text-align:center;color:var(--cyan)"><span class="total-score-big">${t1}점</span></td>
+           <td style="text-align:center"><span class="total-score-big">${t2}점</span></td>
+           <td style="text-align:center"><span class="total-score-big">${t3}점</span></td>
+         </tr>
+        </tbody>
         </table>
       </div>
     </div>
@@ -1321,9 +1321,27 @@ function getSigData2() {
 // ═══════════════════════════════════════
 // PDF
 // ═══════════════════════════════════════
-function generatePDF(idx) {
+async function generatePDF(idx) {
   const d = adminAllData[idx];
+  if (d.hireDate) d.hireDate = d.hireDate.slice(0,10);
+  if (d.evalDate) d.evalDate = d.evalDate.slice(0,10);
   const { jsPDF } = window.jspdf;
+
+  // 서명 이미지 미리 로드
+  async function loadImg(src) {
+    if (!src) return null;
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
+  }
+
+  const [imgSig1, imgSig2, imgSig3, imgSig4, imgSig5] = await Promise.all([
+    loadImg(d.sig1), loadImg(d.sig2), loadImg(d.sig3),
+    loadImg(d.sig4), loadImg(d.sig5)
+  ]);
 
   const canvas = document.createElement('canvas');
   canvas.width = 1123; canvas.height = 794; // A4 landscape
@@ -1365,8 +1383,11 @@ function generatePDF(idx) {
     ctx.fillText(c, rx+i*rw+rw/2, ry+15);
     ctx.strokeRect(rx+i*rw, ry+22, rw, rh);
     // 서명 이미지
-    if (i===2 && d.sig4) { try { const img=new Image(); img.src=d.sig4; ctx.drawImage(img, rx+i*rw+4, ry+24, rw-8, rh-8); } catch(e){} }
-    if (i===3 && d.sig5) { try { const img=new Image(); img.src=d.sig5; ctx.drawImage(img, rx+i*rw+4, ry+24, rw-8, rh-8); } catch(e){} }
+    if (i===0 && imgSig1) ctx.drawImage(imgSig1, rx+i*rw+4, ry+24, rw-8, rh-8);
+    if (i===1 && imgSig2) ctx.drawImage(imgSig2, rx+i*rw+4, ry+24, rw-8, rh-8);
+    if (i===2 && imgSig3) ctx.drawImage(imgSig3, rx+i*rw+4, ry+24, rw-8, rh-8);
+    if (i===3 && imgSig4) ctx.drawImage(imgSig4, rx+i*rw+4, ry+24, rw-8, rh-8);
+    if (i===4 && imgSig5) ctx.drawImage(imgSig5, rx+i*rw+4, ry+24, rw-8, rh-8);
   });
 
   // Section 1
