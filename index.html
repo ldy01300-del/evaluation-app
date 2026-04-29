@@ -1025,18 +1025,177 @@ function showSignOnlyForm(target) {
   const scores1 = target.scores1 ? JSON.parse(target.scores1) : {};
   const scores2 = target.scores2 ? JSON.parse(target.scores2) : {};
   const scores3 = target.scores3 ? JSON.parse(target.scores3) : {};
+  const t1 = calcTotal(scores1), t2 = calcTotal(scores2), t3 = calcTotal(scores3);
 
   document.getElementById('signOnlyContent').innerHTML = `
-    <div class="page-title"><h1>${target.name} 평가 결과</h1><p>${target.dept} · ${target.position}</p></div>
-    ${buildReadonlyScoreCard('1차 자기평가', scores1, calcTotal(scores1), target.opinion1, target.sig1)}
-    ${scores2 ? buildReadonlyScoreCard('2차 소장 평가', scores2, calcTotal(scores2), target.opinion2, target.sig2) : ''}
-    ${scores3 ? buildReadonlyScoreCard('3차 본부장 평가', scores3, calcTotal(scores3), target.opinion3, target.sig3) : ''}
-    ${target.finalResult ? `<div class="card"><div class="card-header"><div class="card-header-num">3</div><h2>최종결정</h2></div>
-    <div class="card-body"><div style="font-size:18px;font-weight:700;color:var(--navy)">${target.finalResult}</div>
-    <div style="font-size:13px;color:var(--text-muted);margin-top:4px">${target.salaryGrade||''} ${target.salaryStep||''}</div></div></div>` : ''}
+    <!-- 헤더 + 결재란 -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-body" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);padding-bottom:4px;margin-bottom:4px">계약직 정규직 전환 평가서</div>
+            <div style="font-size:11px;color:var(--text-muted)">EPS솔루션 · 경관서식 201101</div>
+          </div>
+          <!-- 결재란 -->
+          <table style="border-collapse:collapse;font-size:11px;text-align:center">
+            <tr>
+              <td style="border:1px solid var(--border);padding:4px 2px;background:var(--sky2);font-weight:700;writing-mode:vertical-rl" rowspan="2">결재</td>
+              <td style="border:1px solid var(--border);padding:4px 10px;background:var(--sky2);font-weight:600">1차</td>
+              <td style="border:1px solid var(--border);padding:4px 10px;background:var(--sky2);font-weight:600">2차</td>
+              <td style="border:1px solid var(--border);padding:4px 10px;background:var(--sky2);font-weight:600">3차</td>
+              <td style="border:1px solid var(--border);padding:4px 10px;background:var(--sky2);font-weight:600">사장</td>
+              <td style="border:1px solid var(--border);padding:4px 10px;background:var(--sky2);font-weight:600">대표</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border);padding:2px;width:60px;height:60px;vertical-align:middle">
+                ${target.sig1 ? `<img src="${target.sig1}" style="width:100%;height:56px;object-fit:contain">` : ''}
+              </td>
+              <td style="border:1px solid var(--border);padding:2px;width:60px;height:60px;vertical-align:middle">
+                ${target.sig2 ? `<img src="${target.sig2}" style="width:100%;height:56px;object-fit:contain">` : ''}
+              </td>
+              <td style="border:1px solid var(--border);padding:2px;width:60px;height:60px;vertical-align:middle">
+                ${target.sig3 ? `<img src="${target.sig3}" style="width:100%;height:56px;object-fit:contain">` : ''}
+              </td>
+              <td style="border:1px solid var(--border);padding:2px;width:60px;height:60px;vertical-align:middle">
+                ${target.sig4 ? `<img src="${target.sig4}" style="width:100%;height:56px;object-fit:contain">` : ''}
+              </td>
+              <td style="border:1px solid var(--border);padding:2px;width:60px;height:60px;vertical-align:middle">
+                ${target.sig5 ? `<img src="${target.sig5}" style="width:100%;height:56px;object-fit:contain">` : ''}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. 기본사항 -->
+    <div class="card">
+      <div class="card-header"><div class="card-header-num">1</div><h2>기본사항</h2></div>
+      <div class="card-body">
+        <div class="form-grid cols4">
+          <div class="form-group"><label class="field-label">성명</label><input type="text" value="${target.name||''}" readonly></div>
+          <div class="form-group"><label class="field-label">부서</label><input type="text" value="${target.dept||''}" readonly></div>
+          <div class="form-group"><label class="field-label">직급</label><input type="text" value="${target.position||''}" readonly></div>
+          <div class="form-group"><label class="field-label">입사일</label><input type="text" value="${target.hireDate ? target.hireDate.slice(0,10) : ''}" readonly></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 평가자 종합의견 -->
+    <div class="card">
+      <div class="card-header"><div class="card-header-num">2</div><h2>평가자 종합의견</h2></div>
+      <div class="card-body">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr>
+              <th style="background:var(--navy);color:#fff;padding:10px;border:1px solid rgba(255,255,255,0.1);width:100px">평가자</th>
+              <th style="background:var(--navy);color:#fff;padding:10px;border:1px solid rgba(255,255,255,0.1)">종합의견</th>
+              <th style="background:var(--navy);color:#fff;padding:10px;border:1px solid rgba(255,255,255,0.1);width:120px">서명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid var(--border);padding:10px;text-align:center;font-weight:700;background:var(--sky2)">1차 평가자</td>
+              <td style="border:1px solid var(--border);padding:10px">${target.opinion1||'-'}</td>
+              <td style="border:1px solid var(--border);padding:4px;text-align:center">
+                ${target.sig1 ? `<img src="${target.sig1}" style="width:100px;height:50px;object-fit:contain">` : '-'}
+              </td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border);padding:10px;text-align:center;font-weight:700;background:var(--sky2)">2차 평가자</td>
+              <td style="border:1px solid var(--border);padding:10px">${target.opinion2||'-'}</td>
+              <td style="border:1px solid var(--border);padding:4px;text-align:center">
+                ${target.sig2 ? `<img src="${target.sig2}" style="width:100px;height:50px;object-fit:contain">` : '-'}
+              </td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border);padding:10px;text-align:center;font-weight:700;background:var(--sky2)">3차 평가자</td>
+              <td style="border:1px solid var(--border);padding:10px">${target.opinion3||'-'}</td>
+              <td style="border:1px solid var(--border);padding:4px;text-align:center">
+                ${target.sig3 ? `<img src="${target.sig3}" style="width:100px;height:50px;object-fit:contain">` : '-'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. 최종결정 -->
+    <div class="card">
+      <div class="card-header"><div class="card-header-num">3</div><h2>최종결정</h2></div>
+      <div class="card-body">
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">최종 결정</div>
+            <div style="font-size:20px;font-weight:700;color:var(--navy);font-family:'Noto Serif KR',serif">${target.finalResult||'-'}</div>
+          </div>
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">급여 등급</div>
+            <div style="font-size:16px;font-weight:600;color:var(--navy)">${target.salaryGrade||'-'}</div>
+          </div>
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">호봉</div>
+            <div style="font-size:16px;font-weight:600;color:var(--navy)">${target.salaryStep||'-'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 평가내용 점수 종합 -->
+    <div class="card">
+      <div class="card-header"><div class="card-header-num">4</div><h2>평가 점수 종합</h2></div>
+      <div class="card-body" style="padding:0">
+        <table class="eval-tbl">
+          <thead>
+            <tr>
+              <th style="width:60px">고과요소</th>
+              <th style="width:90px">평가항목</th>
+              <th>평가내용</th>
+              <th style="width:60px;color:var(--cyan-light)">1차</th>
+              <th style="width:60px">2차</th>
+              <th style="width:60px">3차</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${buildScoreSummaryRows(scores1, scores2, scores3)}
+            <tr class="total-row">
+              <td colspan="3" style="text-align:right;padding-right:16px;font-weight:700">총 점</td>
+              <td style="text-align:center;color:var(--cyan)"><span class="total-score-big">${t1}점</span></td>
+              <td style="text-align:center"><span class="total-score-big">${t2}점</span></td>
+              <td style="text-align:center"><span class="total-score-big">${t3}점</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   `;
 
   initSig2();
+}
+
+function buildScoreSummaryRows(scores1, scores2, scores3) {
+  let rows = '';
+  let prevFactor = null;
+  EVAL_ITEMS.forEach((item, idx) => {
+    const factorCell = item.factor !== prevFactor
+      ? `<td class="factor-cell" rowspan="${EVAL_ITEMS.filter(i=>i.factor===item.factor).length}">${item.factor}</td>`
+      : '';
+    prevFactor = item.factor;
+    const s1 = scores1[idx] || '-';
+    const s2 = scores2[idx] || '-';
+    const s3 = scores3[idx] || '-';
+    rows += `<tr>
+      ${factorCell}
+      <td><div class="item-name">${item.name}</div></td>
+      <td><div class="item-desc">${item.desc}</div></td>
+      <td style="text-align:center;font-weight:700;color:var(--cyan);font-size:14px">${s1}</td>
+      <td style="text-align:center;font-weight:700;color:var(--navy);font-size:14px">${s2}</td>
+      <td style="text-align:center;font-weight:700;color:var(--navy);font-size:14px">${s3}</td>
+    </tr>`;
+  });
+  return rows;
 }
 
 async function submitSignOnly() {
@@ -1065,6 +1224,11 @@ async function submitEval() {
   if (Object.keys(currentScores).length < EVAL_ITEMS.length) {
     alert('모든 항목의 점수를 선택해주세요.');
     return;
+  }
+  //입력 안했을 시 넘어가지마
+  if (!document.getElementById('f_opinion').value.trim()) {
+  alert('종합의견을 입력해주세요.');
+  return;
   }
   const sigData = getSigData();
   if (!sigData) { alert('서명을 해주세요.'); return; }
