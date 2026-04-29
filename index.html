@@ -585,6 +585,9 @@ function showError(msg) {
 function showLoading(msg='처리 중...') {
   document.getElementById('loadingMsg').textContent = msg;
   document.getElementById('loadingOverlay').style.display = 'flex';
+  // 강제로 reflow 일으켜서 애니메이션 시작
+  overlay.getBoundingClientRect();
+  document.querySelector('.loading-spinner').getAnimations().forEach(a => a.play());
 }
 function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
